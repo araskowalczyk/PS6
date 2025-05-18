@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje wnioski</title>
+</head>
+<body>
+    <h2>Moje wnioski urlopowe</h2>
+    {% if requests %}
+        <table border="1">
+            <tr>
+                <th>Od</th>
+                <th>Do</th>
+                <th>Powód</th>
+                <th>Status</th>
+            </tr>
+            {% for r in requests %}
+                <tr>
+                    <td>{{ r[0] }}</td>
+                    <td>{{ r[1] }}</td>
+                    <td>{{ r[2] }}</td>
+                    <td>{{ r[3] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Brak wniosków do wyświetlenia.</p>
+    {% endif %}
+    <br>
+    <a href="{{ url_for('index') }}">Powrót</a>
+</body>
+</html>

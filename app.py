@@ -12,7 +12,7 @@ init_db()
 @app.route('/')
 def index():
     if 'user' in session:
-        return f"Witaj, {session['user']}!"
+        return render_template('index.html', username=session['user'])
     return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -45,5 +45,21 @@ def leave_request():
         return render_template('leave_request.html', success=success)
     return render_template('leave_request.html')
 
+@app.route('/my-requests')
+def my_requests():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute("SELECT start_date, end_date, reason, status FROM leave_requests WHERE user_id = ?", (session['user_id'],))
+    requests = c.fetchall()
+    conn.close()
+
+    return render_template('my_requests.html', requests=requests)
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+

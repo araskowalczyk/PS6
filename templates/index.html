@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel główny</title>
+</head>
+<body>
+    <h2>Witaj, {{ username }}!</h2>
+    <ul>
+        <li><a href="{{ url_for('leave_request') }}">Złóż wniosek urlopowy</a></li>
+        <li><a href="{{ url_for('my_requests') }}">Wyświetl moje wnioski</a></li>
+        <li><a href="{{ url_for('logout') }}">Wyloguj się</a></li>
+    </ul>
+</body>
+</html>
