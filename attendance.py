@@ -1,7 +1,5 @@
-from models import Attendance
+from database import get_connection
 from datetime import datetime
-
-attendance_records = []
 
 def view_attendance(user_id, date_range):
     start, end = date_range
@@ -13,7 +11,13 @@ def view_attendance(user_id, date_range):
     except ValueError:
         return []
 
-    return [
-        record for record in attendance_records
-        if record.user_id == user_id and start <= record.date <= end
-    ]
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute(
+        "SELECT id, user_id, date, status FROM attendance WHERE user_id = ? AND date BETWEEN ? AND ?",
+        (user_id, start, end)
+    )
+    records = c.fetchall()
+    conn.close()
+
+    return records  # lista krotek: (id, user_id, date, status)
