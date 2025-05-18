@@ -11,3 +11,9 @@ def register_user(username, password, role):
     new_user = User(len(users) + 1, username, password, role)
     users.append(new_user)
     return True
+
+def login_user(username, password):
+    for user in users:
+        if user.username == username and user.password == password:
+            return user
+    return None
