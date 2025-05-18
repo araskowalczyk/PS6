@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}System urlopowy{% endblock %}</title>
+</head>
+<body>
+    {% if session['user'] %}
+        <p>Zalogowany jako: {{ session['user'] }} ({{ session['role'] }})</p>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Strona główna</a></li>
+                {% if session['role'] == 'pracownik' %}
+                    <li><a href="{{ url_for('leave_request') }}">Złóż wniosek</a></li>
+                    <li><a href="{{ url_for('my_requests') }}">Moje wnioski</a></li>
+                {% elif session['role'] == 'kierownik' %}
+                    <li><a href="{{ url_for('manager_requests') }}">Panel kierownika</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Wyloguj się</a></li>
+            </ul>
+        </nav>
+        <hr>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</body>
+</html>

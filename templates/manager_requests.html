@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Moje wnioski{% endblock %}
+{% block title %}Panel kierownika{% endblock %}
 
 {% block content %}
-<h2>Moje wnioski urlopowe</h2>
+<h2>Oczekujące wnioski do zatwierdzenia</h2>
 
 {% if requests %}
     <table border="1" cellpadding="5">
         <tr>
+            <th>Użytkownik</th>
             <th>Od</th>
             <th>Do</th>
             <th>Powód</th>
             <th>Status</th>
+            <th>Akcje</th>
         </tr>
         {% for r in requests %}
         <tr>
-            <td>{{ r[0] }}</td>
             <td>{{ r[1] }}</td>
             <td>{{ r[2] }}</td>
             <td>{{ r[3] }}</td>
+            <td>{{ r[4] }}</td>
+            <td>{{ r[5] }}</td>
+            <td>
+                <a href="{{ url_for('approve', request_id=r[0]) }}">Zatwierdź</a> |
+                <a href="{{ url_for('reject', request_id=r[0]) }}">Odrzuć</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
 {% else %}
-    <p>Nie masz jeszcze żadnych wniosków.</p>
+    <p>Brak wniosków do przetworzenia.</p>
 {% endif %}
 {% endblock %}

@@ -1,28 +1,29 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Wniosek urlopowy</title>
-</head>
-<body>
-    <h2>Wniosek urlopowy</h2>
-    {% if success is defined %}
-        {% if success %}
-            <p style="color:green;">Wniosek został złożony.</p>
-        {% else %}
-            <p style="color:red;">Błąd: niepoprawne dane wniosku.</p>
-        {% endif %}
+{% extends 'base.html' %}
+
+{% block title %}Złóż wniosek{% endblock %}
+
+{% block content %}
+<h2>Wniosek urlopowy</h2>
+<form method="POST">
+    <label>Data rozpoczęcia:</label><br>
+    <input type="date" name="start_date" required><br>
+
+    <label>Data zakończenia:</label><br>
+    <input type="date" name="end_date" required><br>
+
+    <label>Powód:</label><br>
+    <input type="text" name="reason"><br><br>
+
+    <button type="submit">Złóż wniosek</button>
+</form>
+
+{% if success is defined %}
+    {% if success %}
+        <p style="color:green;">✅ Wniosek został złożony.</p>
+    {% else %}
+        <p style="color:red;">❌ Błąd przy składaniu wniosku. Sprawdź dane.</p>
     {% endif %}
-    <form method="POST">
-        <label>Data rozpoczęcia:</label><br>
-        <input type="date" name="start_date"><br>
-        <label>Data zakończenia:</label><br>
-        <input type="date" name="end_date"><br>
-        <label>Powód:</label><br>
-        <input type="text" name="reason"><br><br>
-        <button type="submit">Złóż wniosek</button>
-    </form>
-    <br>
-    <a href="{{ url_for('logout') }}">Wyloguj się</a>
-</body>
-</html>
+{% endif %}
+{% endblock %}
+
+
