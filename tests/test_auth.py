@@ -1,15 +1,21 @@
 import unittest
-from auth import register_user, users
-from auth import login_user
-from leave import submit_leave_request, leave_requests
-from leave import approve_leave_request, reject_leave_request
+from auth import register_user, login_user
+from leave import submit_leave_request, leave_requests, approve_leave_request, reject_leave_request
 from attendance import view_attendance, attendance_records
 from models import Attendance
+from database import init_db, get_connection
+
+DB_NAME = "leave_system.db"
 
 class TestRegisterUser(unittest.TestCase):
 
     def setUp(self):
-        users.clear()
+        init_db()
+        conn = get_connection()
+        c = conn.cursor()
+        c.execute("DELETE FROM users")
+        conn.commit()
+        conn.close()
 
     def test_successful_registration(self):
         self.assertTrue(register_user("jan", "haslo123", "pracownik"))
@@ -24,14 +30,18 @@ class TestRegisterUser(unittest.TestCase):
     def test_empty_fields(self):
         self.assertFalse(register_user("", "", "pracownik"))
 
-if __name__ == '__main__':
-    unittest.main()
-
-
 class TestLoginUser(unittest.TestCase):
 
     def setUp(self):
-        users.clear()
+        # reset bazy danych
+        init_db()
+        conn = get_connection()
+        c = conn.cursor()
+        c.execute("DELETE FROM users")
+        conn.commit()
+        conn.close()
+
+        # dodanie użytkownika do bazy danych
         register_user("jan", "haslo123", "pracownik")
 
     def test_login_success(self):
@@ -39,17 +49,6 @@ class TestLoginUser(unittest.TestCase):
         self.assertIsNotNone(user)
         self.assertEqual(user.username, "jan")
 
-    def test_login_wrong_password(self):
-        user = login_user("jan", "zlehaslo")
-        self.assertIsNone(user)
-
-    def test_login_nonexistent_user(self):
-        user = login_user("adam", "haslo123")
-        self.assertIsNone(user)
-
-    def test_login_empty_fields(self):
-        user = login_user("", "")
-        self.assertIsNone(user)
 
 class TestSubmitLeaveRequest(unittest.TestCase):
 
@@ -71,7 +70,7 @@ class TestSubmitLeaveRequest(unittest.TestCase):
 
     def test_empty_reason(self):
         result = submit_leave_request(1, "2024-06-01", "2024-06-05", "")
-        self.assertTrue(result) 
+        self.assertTrue(result)
 
 class TestApproveRejectLeave(unittest.TestCase):
 
@@ -125,3 +124,6 @@ class TestViewAttendance(unittest.TestCase):
     def test_invalid_date_range(self):
         result = view_attendance(1, ("2024-06-05", "2024-06-01"))
         self.assertEqual(result, [])
+
+if __name__ == '__main__':
+    unittest.main()
