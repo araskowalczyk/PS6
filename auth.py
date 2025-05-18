@@ -1,3 +1,5 @@
+from models import User
+
 users = []
 
 def register_user(username, password, role):
