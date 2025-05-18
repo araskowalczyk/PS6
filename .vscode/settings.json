@@ -7,8 +7,11 @@
         "-s",
         "./tests",
         "-p",
-        "*test.py"
+        "*test*.py"
     ],
     "python.testing.autoTestDiscoverOnSaveEnabled": true,
-    "python.pythonPath": "python"
+    "python.pythonPath": "python",
+    "python.testing.pytestArgs": [
+        "tests"
+    ]
 }
